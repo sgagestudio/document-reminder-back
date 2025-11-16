@@ -1,0 +1,27 @@
+server:
+    port: 8081
+
+spring:
+    application:
+        name: document-reminder
+    jpa:
+        database: POSTGRESQL
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+    datasource:
+        url: jdbc:postgresql://localhost:5432/efficix
+        username: efficix
+        password: efficix1234
+        driverClassName: org.postgresql.Driver
+    mail:
+        host: smtp-relay.brevo.com
+        port: 587
+        username: ${MAIL_USERNAME}
+        password: ${MAIL_PASSWORD}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
