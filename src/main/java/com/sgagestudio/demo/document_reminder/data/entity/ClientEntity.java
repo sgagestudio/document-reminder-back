@@ -1,7 +1,10 @@
 package com.sgagestudio.demo.document_reminder.data.entity;
 
 import jakarta.persistence.*;
+
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +21,6 @@ public class ClientEntity {
     @Column(name = "email")
     private String email;
 
-    // Ahora los clientes pertenecen a una organización por ID
     @Column(name = "organization_id", nullable = false)
     private UUID organizationId;
 
@@ -31,8 +33,22 @@ public class ClientEntity {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "notes")
+    @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "assigned_user_id")
+    private UUID assignedUserId;
+
+    @ElementCollection
+    @CollectionTable(name = "client_tags", joinColumns = @JoinColumn(name = "client_id"))
+    @Column(name = "tag")
+    private List<String> tags = new ArrayList<>();
+
+    @Column(name = "custom_fields", columnDefinition = "TEXT")
+    private String customFields;
 
     public UUID getId() {
         return id;
@@ -96,5 +112,37 @@ public class ClientEntity {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public UUID getAssignedUserId() {
+        return assignedUserId;
+    }
+
+    public void setAssignedUserId(UUID assignedUserId) {
+        this.assignedUserId = assignedUserId;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getCustomFields() {
+        return customFields;
+    }
+
+    public void setCustomFields(String customFields) {
+        this.customFields = customFields;
     }
 }
