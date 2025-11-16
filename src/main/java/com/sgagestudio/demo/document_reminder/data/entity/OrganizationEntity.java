@@ -14,6 +14,9 @@ public class OrganizationEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
     public UUID getId() {
         return id;
     }
@@ -28,5 +31,13 @@ public class OrganizationEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
