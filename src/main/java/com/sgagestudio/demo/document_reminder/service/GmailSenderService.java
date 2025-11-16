@@ -17,21 +17,24 @@ public class GmailSenderService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String to, String htmlContent, String language) {
+    public void sendMail(String fromAddress,
+                         String fromDisplayName,
+                         String to,
+                         String subject,
+                         String htmlContent,
+                         String language) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom("sgagestudio@gmail.com", "Sgage Studio");
+            helper.setFrom(fromAddress, fromDisplayName);
             helper.setTo(to);
-            helper.setSubject(getSubjectByLanguage(language));
-            helper.setText(htmlContent, true); // true → es HTML
+            helper.setSubject(subject == null ? getSubjectByLanguage(language) : subject);
+            helper.setText(htmlContent, true);
 
             javaMailSender.send(message);
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error al enviar el correo: " + e.getMessage(), e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
         }
     }
 

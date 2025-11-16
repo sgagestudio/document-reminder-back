@@ -1,45 +1,57 @@
 package com.sgagestudio.demo.document_reminder.controller;
 
-import com.sgagestudio.demo.document_reminder.data.dto.request.CreateTemplateRequest;
-import com.sgagestudio.demo.document_reminder.data.dto.request.GetTemplatesRequest;
-import com.sgagestudio.demo.document_reminder.data.dto.response.CreateTemplateResponse;
-import com.sgagestudio.demo.document_reminder.data.dto.response.GetTemplatesResponse;
+import com.sgagestudio.demo.document_reminder.data.dto.request.TemplateRequest;
+import com.sgagestudio.demo.document_reminder.data.dto.response.TemplateResponse;
 import com.sgagestudio.demo.document_reminder.service.TemplateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/v1/template")
+@RequestMapping("/api/v1/templates")
+@CrossOrigin(origins = "*")
 public class TemplateController {
 
-    private final TemplateService service;
+    private final TemplateService templateService;
 
-    public TemplateController(TemplateService service) {
-        this.service = service;
+    public TemplateController(TemplateService templateService) {
+        this.templateService = templateService;
     }
 
-
-    @GetMapping("/")
-    public ResponseEntity<GetTemplatesResponse> getTemplatesByUser(
-            @RequestBody GetTemplatesRequest request
-            ) {
-        return ResponseEntity.ok(service.findTemplatesByUser(request));
+    @PostMapping
+    public ResponseEntity<TemplateResponse> create(@RequestBody TemplateRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(templateService.create(request));
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity<Void> deleteById(
-            @RequestBody Long id
-    ) {
-        service.deleteById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @PutMapping("/{id}")
+    public ResponseEntity<TemplateResponse> update(@PathVariable Long id, @RequestBody TemplateRequest request) {
+        return ResponseEntity.ok(templateService.update(id, request));
     }
 
-    @PutMapping("/")
-    public ResponseEntity<CreateTemplateResponse> create(
-            @RequestBody CreateTemplateRequest request
-            ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+    @GetMapping("/{id}")
+    public ResponseEntity<TemplateResponse> get(@PathVariable Long id) {
+        return ResponseEntity.ok(templateService.get(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<TemplateResponse>> list(@RequestParam UUID organizationId,
+                                                       @RequestParam(required = false) UUID userId,
+                                                       @RequestParam(defaultValue = "false") boolean defaults) {
+        if (defaults) {
+            return ResponseEntity.ok(templateService.listDefaults(organizationId));
+        }
+        if (userId != null) {
+            return ResponseEntity.ok(templateService.listByUser(organizationId, userId));
+        }
+        return ResponseEntity.ok(templateService.list(organizationId));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        templateService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

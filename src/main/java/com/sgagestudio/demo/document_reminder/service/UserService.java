@@ -1,16 +1,23 @@
 package com.sgagestudio.demo.document_reminder.service;
 
-import com.sgagestudio.demo.document_reminder.data.dto.request.CreateUserRequest;
-import com.sgagestudio.demo.document_reminder.data.dto.request.GetEmployeesByOrganizationRequest;
-import com.sgagestudio.demo.document_reminder.data.dto.response.GetEmployeesResponse;
-import com.sgagestudio.demo.document_reminder.data.dto.response.CreateUserResponse;
+import com.sgagestudio.demo.document_reminder.data.dto.request.UserRequest;
+import com.sgagestudio.demo.document_reminder.data.dto.response.UserResponse;
+import com.sgagestudio.demo.document_reminder.data.entity.UserRole;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    GetEmployeesResponse getAllByOrganization(GetEmployeesByOrganizationRequest request);
 
-    void deleteById(UUID id);
+    UserResponse create(UserRequest request);
 
-    CreateUserResponse createUser(CreateUserRequest request);
+    UserResponse update(UUID id, UserRequest request);
+
+    List<UserResponse> listByOrganization(UUID organizationId);
+
+    List<UserResponse> listByOrganizationAndRole(UUID organizationId, UserRole role);
+
+    UserResponse get(UUID id);
+
+    void delete(UUID id);
 }

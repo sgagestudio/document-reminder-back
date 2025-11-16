@@ -9,8 +9,11 @@ import java.util.UUID;
 public class TemplateEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "organization_id", nullable = false)
+    private UUID organizationId;
 
     @Column(name = "type")
     private String type;
@@ -21,12 +24,17 @@ public class TemplateEntity {
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "body")
+    @Column(name = "body", columnDefinition = "TEXT")
     private String body;
 
+    @Column(name = "language")
+    private String language = "es";
 
     @Column(name = "user_id")
     private UUID userId;
+
+    @Column(name = "is_default")
+    private boolean isDefault;
 
     public Long getId() {
         return id;
@@ -34,6 +42,14 @@ public class TemplateEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(UUID organizationId) {
+        this.organizationId = organizationId;
     }
 
     public String getType() {
@@ -68,11 +84,27 @@ public class TemplateEntity {
         this.body = body;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public UUID getUserId() {
         return userId;
     }
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }
