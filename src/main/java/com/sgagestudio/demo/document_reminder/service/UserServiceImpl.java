@@ -5,7 +5,6 @@ import com.sgagestudio.demo.document_reminder.data.dto.response.UserResponse;
 import com.sgagestudio.demo.document_reminder.data.entity.UserEntity;
 import com.sgagestudio.demo.document_reminder.data.entity.UserRole;
 import com.sgagestudio.demo.document_reminder.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +16,15 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserResponse create(UserRequest request) {
         UserEntity entity = map(new UserEntity(), request);
-        entity.setPassword(passwordEncoder.encode(request.password()));
+        entity.setPassword(request.password());
         return map(repository.save(entity));
     }
 
@@ -37,7 +34,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         map(entity, request);
         if (request.password() != null) {
-            entity.setPassword(passwordEncoder.encode(request.password()));
+            entity.setPassword(request.password());
         }
         return map(repository.save(entity));
     }

@@ -80,3 +80,15 @@ Este repositorio contiene un esqueleto de API en Spring Boot para Document Remin
    - Documentar los endpoints (OpenAPI/Swagger), añadir scripts de `docker-compose` para Postgres/Brevo y definir un *onboarding* claro para nuevos desarrolladores.
 
 Con estos pasos, el backend alcanzará la funcionalidad descrita: organizaciones aisladas, usuarios con roles, clientes administrados, plantillas y recordatorios automatizados con correos personalizados y seguros.
+
+## 4. Qué está habilitado para pruebas rápidas
+- **Seguridad desactivada temporalmente:** los endpoints están abiertos para facilitar validaciones manuales, sin JWT ni `SecurityFilterChain`.
+- **Datos de ejemplo cargados automáticamente:** `src/main/resources/data.sql` inserta organizaciones, usuarios, clientes, plantillas y `data_requests` con UUIDs fijos.
+- **Configuración lista para poblar datos:** `spring.sql.init.mode=always` y `spring.jpa.defer-datasource-initialization=true` garantizan que el esquema se cree y los datos se carguen al arrancar.
+
+### Cómo probar
+1. Arranca la API: `./mvnw spring-boot:run` (puerto 8081 por defecto).
+2. Consulta los recursos poblados, por ejemplo:
+   - `GET /api/v1/clients` para ver los clientes por organización.
+   - `GET /api/v1/templates` para revisar las plantillas precargadas.
+   - `GET /api/v1/data-requests` para validar las automatizaciones de ejemplo.
